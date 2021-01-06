@@ -1,6 +1,6 @@
 SRCS	= main.c datatools.c matmult_nat.c
 OBJS	= $(SRCS:.c=.o)
-TARGET	= matmult_nat.$(CC)
+TARGET	= matmult_c.$(CC)
 
 CC	= gcc
 INCS	= 
