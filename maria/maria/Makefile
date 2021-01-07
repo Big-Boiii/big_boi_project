@@ -1,23 +1,16 @@
-SRCS	= main.c datatools.c matmult_nat.c
+SRCS	= matmult_nat.c matmult_lib.c
 OBJS	= $(SRCS:.c=.o)
-TARGET	= matmult_c.$(CC)
-
-CC	= gcc
+TARGET	= libmatmult.so
+CC	= gcc -std=c99 -fPIE
 INCS	= 
 DBG	= -g
 OPT	= -O3
 PARA	= 
-CFLAGS	= $(DBG) $(OPT) $(PARA) $(XOPTS)
+LIBS	= -lm -L/usr/Lib64/atlas -lsatlas
+CFLAGS	= $(DBG) $(OPT) $(PARA) $(XOPTS) $(LIBS)
 
-LIBS	= 
-
-all: $(TARGET)
-
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBS)
+$(TARGET): $(OBJS)  
+	$(CC) *.o  -shared -o $(TARGET) 
 
 clean:
-	@/bin/rm -f $(OBJS) *~ core*
-
-realclean: clean
-	@/bin/rm -f $(TARGET)
+	rm -f *.o *.so 
