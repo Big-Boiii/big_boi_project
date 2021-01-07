@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <cblas.h>
+
 void
 matmult_nat(int m, int n, int k, double **A, double **B, double **C) {
     for(int i1 = 0; i1< m; i1++){
@@ -10,6 +12,13 @@ matmult_nat(int m, int n, int k, double **A, double **B, double **C) {
         }
     }
 }
+
+void
+matmult_lib(int m, int n, int k, double **A, double **B, double **C) {
+  cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.,A[0],k+1,B[0],n+1,0.,C[0],n+1);
+}
+
+
 
 void print_matrix(int n, int k, double **C){
     for (int i=0; i<n; i++){
@@ -32,7 +41,8 @@ void assign(double** arr, int m, int n)
 {
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
-            arr[i][j] = rand()*0.0001;
+            //arr[i][j] = rand()*0.0001;
+            arr[i][j]=2.;
         }
     }
 }
@@ -64,6 +74,17 @@ int main() {
     printf("\n");
     matmult_nat(m,n,k,A,B,C);
     print_matrix(m,n,C);
+    reset_matrix(m,n,C);
+    print_matrix(m,k,A);
+    printf("\n");
+    print_matrix(k,n,B);
+    printf("\n \n");
+    matmult_lib(m,n,k,A,B,C);
+    print_matrix(m,n,C);
+    double d=1.5;
+    
+    printf("\n %ldd",sizeof(d));
+	printf("\n %lf", 30720000./8);
     return 0;
 }
 
