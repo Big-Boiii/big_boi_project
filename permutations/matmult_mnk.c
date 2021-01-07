@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 void
-matmult_nmk(int m, int k, int n, double **A, double **B, double **C) {
+matmult_mnk(int m, int k, int n, double **A, double **B, double **C) {
     
     int i1, i2,i3;
     for(i1 = 0; i1< m; i1++){
@@ -12,8 +12,8 @@ matmult_nmk(int m, int k, int n, double **A, double **B, double **C) {
 		
 
     
-    for(i2=0; i2<n; i2++){
-    	for(int i1=0; i1<m; i1++){
+    for(i1=0; i1<m; i1++){
+    	for(int i2=0; i2<n; i2++){
 	    for(i3 = 0; i3 < k; i3++){
 		C[i1][i2]+=A[i1][i3]*B[i3][i2];
 	     }
@@ -21,6 +21,3 @@ matmult_nmk(int m, int k, int n, double **A, double **B, double **C) {
     }
 	
 }
-
-
-
