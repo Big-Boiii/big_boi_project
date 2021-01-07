@@ -2,7 +2,6 @@
 
 void
 matmult_lib(int m, int k, int n, double **A, double **B, double **C) {
-  cblas_gemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1,A,m,B,k,1,C,m)
+  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.,&A[0][0],m,&B[0][0],k,0.,&C[0][0],m);
 }
-
 
