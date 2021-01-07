@@ -76,15 +76,32 @@ void initMatrix(double **arr, int m, int n){
 }
 
 void pointBlock(int row, int col, int bs, double **A, double **Z){
+    // This functions takes Z, which is a matrix bs*bs and makes the pointers stored at Z[0], Z[1] to point at the locations &A[row][col].
+    // In this way we make Z point at the values of A we want for the block.
+    // Z needs to be initialized with: Z = malloc(bs * sizeof(double *)); before being used.
+
     int i;
     for(i = 0; i < bs; i++){
         Z[i] = &A[row+i][col];
     }
 }
 
+void getBlock(int row, int col, int bs, double **A, double **Z){
+    // This functions copies the values from A we want for the block into a matrix Z of size bs x bs.
+    // Z needs to be initialized with: Z = malloc_2d(bs, bs); before being used.
+    
+    int i, j;
+
+    for(i = 0; i < bs; i++){
+        for(j = 0; j < bs; j++){
+            Z[i][j] = A[row + i][col + j];
+        }
+    }
+}
+
 
 int main(){
-	int i, m = 6, n = 6, bs = 2;
+	int m = 6, n = 6, bs = 2;
 	double **A;
     double **Z;
 
@@ -92,14 +109,14 @@ int main(){
 	initMatrix(A, m, n);
 	printMatrix(A, m, n);
     
-    Z = malloc(bs * sizeof(double *));
-    pointBlock(2, 2, bs, A, Z);
+    // Z = malloc(bs * sizeof(double *));
+    // pointBlock(2, 2, bs, A, Z);
  
-    printMatrix(Z, bs, bs);
+    Z = malloc_2d(bs, bs);
+    getBlock(2, 2, bs, A, Z);
+    
+    printMatrix(Z, bs, bs);    
 
-    // printf("A: %p, \t *A: %p, \t **A: %.0f\n", A, *A, **A);
-    // printf("&A[0]: %p, \t A[0]: %p, \t *A[0]: %.0f\n", &A[0], A[0], *A[0]);
-    // printf("&A[0][0]: %p, \t A[0][0]: %.0f", &A[0][0], A[0][0]);
 	return 0;
 }
 
