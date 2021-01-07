@@ -1,5 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <cblas.h>
+
+void matmult_lib(int m, int n, int k, double **A, double **B, double **C) {
+  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.,&A[0][0],k,&B[0][0],n,0.,&C[0][0],n);
+}
+
 
 void matmult_nat(int m, int n, int k, double **A, double **B, double **C) {
     
@@ -54,15 +60,15 @@ void initMatrix(double **arr, int m, int n){
 
     for(i = 0; i < m; i++){
         for(j = 0; j < n; j++){
-            arr[i][j] = i*j;
-            arr[i][j] = rand() % 5;
+			// arr[i][j] = i*j;
+            arr[i][j] = rand() % 20;
 		}
 	}
 }
 
 
 int main(){
-	int m = 1, n = 1, k = 2, i;
+	int m = 5, n = 2, k = 4, i;
 	double **A, **B, **C;
 
 	A = malloc_2d(m, k);
@@ -73,11 +79,22 @@ int main(){
 	
 	C = malloc_2d(m,n);
 
+	printf("With our function:\n");
+
 	matmult_nat(m, n, k, A, B, C);
 
 	printMatrix(A, m, k);
 	printMatrix(B, k, n);
 	printMatrix(C, m, n);
+
+	printf("With CBLAS function:\n");
+
+	matmult_lib(m, n, k, A, B, C);
+
+	printMatrix(A, m, k);
+	printMatrix(B, k, n);
+	printMatrix(C, m, n);
+
 
 	return 0;
 }
