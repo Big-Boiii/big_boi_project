@@ -20,26 +20,12 @@ void matmult_nat(int m, int n, int k, double **A, double **B, double **C) {
     }
 }
 
-void matmult_blk(int m, int n, int k, int bs, double **A, double **B, double **C){
-    int i1, i2, i3;
-
-    for(i1 = 0; i1 < m/bs; i1 += bs){
-		for(i2 = 0; i2 < n; i2++){
-	    	C[i1][i2] = 0;
-	 	}
-    }
-}
-
-
-
-
-
 void printMatrix(double **arr, int m, int n){
 	int i, j;
 	
 	for(i = 0; i < m; i++){
 		for(j = 0; j < n; j++){
-			printf("%.0f \t", arr[i][j]);
+			printf("%.0f \t\t", arr[i][j]);
 		}
 		printf("\n");
 	}
@@ -87,9 +73,9 @@ void pointBlock(int row, int col, int bs, double **A, double **Z){
 }
 
 void getBlock(int row, int col, int bs, double **A, double **Z){
-    // This functions copies the values from A we want for the block into a matrix Z of size bs x bs.
+    // This functions copies the values from A we want for the block into a matrix Z of size bs x bs i.e. make a bs x bs block starting in position A[row][col].
     // Z needs to be initialized with: Z = malloc_2d(bs, bs); before being used.
-    
+
     int i, j;
 
     for(i = 0; i < bs; i++){
@@ -100,22 +86,73 @@ void getBlock(int row, int col, int bs, double **A, double **Z){
 }
 
 
-int main(){
-	int m = 6, n = 6, bs = 2;
-	double **A;
-    double **Z;
+void matmult_blk_inside(int row, int col, int bs, double **ZA, double **ZB, double **C){
+    int i1, i2, i3;
+    for(i1 = 0; i1< bs; i1++){
+    	for(i2 = 0; i2 < bs; i2++){
+	    	for(i3 = 0; i3 < bs; i3++){
+				C[row + i1][col + i2] += ZA[i1][i3] * ZB[i3][i2];
+	    	}
+        }
+    }
+}
 
-	A = malloc_2d(m, n);
-	initMatrix(A, m, n);
-	printMatrix(A, m, n);
-    
-    // Z = malloc(bs * sizeof(double *));
-    // pointBlock(2, 2, bs, A, Z);
- 
-    Z = malloc_2d(bs, bs);
-    getBlock(2, 2, bs, A, Z);
-    
-    printMatrix(Z, bs, bs);    
+void matmult_blk(int m, int n, int k, int bs, double **A, double **B, double **C){
+    int i1, i2, i3;
+    double **ZA, **ZB;
+
+    // Initialize C to be a 0 matrix.
+    for(i1 = 0; i1 < m; i1++){
+		for(i2 = 0; i2 < n; i2++){
+	    	C[i1][i2] = 0;
+	 	}
+    }
+
+    // First we calculate all entries that can be subdivided in blocks of bs x bs. 
+	// We allocate in memory the two matrices were we will be storing the blocks.
+    // printf("%d", bs);
+	ZA = malloc_2d(bs, bs);
+    ZB = malloc_2d(bs, bs);
+
+    for(i1 = 0; i1 <= m - bs; i1 += bs){
+    	for(i2 = 0; i2 <= n - bs; i2 += bs){
+	    	for(i3 = 0; i3 <= k - bs; i3 += bs){
+				// C[i1][i2]+=A[i1][i3]*B[i3][i2];
+                getBlock(i1, i3, bs, A, ZA);
+                getBlock(i3, i2, bs, B, ZB);
+                matmult_blk_inside(i1, i2, bs, ZA, ZB, C);
+	    	}
+        }
+    }
+}
+
+int main(){
+	int m = 4, n = 4, k = 4, bs = 2;
+	double **A, **B, **C;
+
+	A = malloc_2d(m, k);
+	initMatrix(A, m, k);
+
+	B = malloc_2d(k,n);
+	initMatrix(B, k, n);
+	
+	C = malloc_2d(m,n);
+
+	printf("With our function:\n");
+
+	matmult_nat(m, n, k, A, B, C);
+
+	printMatrix(A, m, k);
+	printMatrix(B, k, n);
+	printMatrix(C, m, n);
+
+	printf("With block function:\n");
+
+	matmult_blk(m, n, k, bs, A, B, C);
+
+	printMatrix(A, m, k);
+	printMatrix(B, k, n);
+	printMatrix(C, m, n);
 
 	return 0;
 }
