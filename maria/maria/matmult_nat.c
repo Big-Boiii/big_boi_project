@@ -1,5 +1,5 @@
 void
-matmult_nat(int m, int k, int n, double **A, double **B, double **C) {
+matmult_nat(int m, int n, int k, double **A, double **B, double **C) {
     
     int i1, i2,i3;
     for(i1 = 0; i1< m; i1++){
