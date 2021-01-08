@@ -1,0 +1,76 @@
+30
+50
+76
+112
+149
+161
+172
+200
+250
+300
+350
+400
+500
+800
+1000
+2000
+3000
+4000
+All done!
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@n-62-21-76>
+Subject: Job 8704771: <comparison> in cluster <dcc> Done
+
+Job <comparison> was submitted from host <n-62-30-7> by user <s202581> in cluster <dcc> at Fri Jan  8 15:18:28 2021
+Job was executed on host(s) <n-62-21-76>, in queue <hpcintro>, as user <s202581> in cluster <dcc> at Fri Jan  8 15:18:30 2021
+</zhome/8f/4/153683> was used as the home directory.
+</zhome/8f/4/153683/HPC/big_boi_project/jorge/Assignment/comparison with mkn> was used as the working directory.
+Started at Fri Jan  8 15:18:30 2021
+Terminated at Fri Jan  8 15:24:04 2021
+Results reported at Fri Jan  8 15:24:04 2021
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#!/bin/bash
+
+#BSUB -J comparison
+#BSUB -W 10
+#BSUB -q hpcintro
+
+rm -f mkn_output.txt blk_output.txt
+
+msizes="30 50 76 112 149 161 172 200 250 300 350 400 500 800 1000 2000 3000 4000"
+
+for size in $msizes
+do
+    echo $size
+    block=$((40*$size/100))
+    matmult_c.gcc mkn $size $size $size >> "./mkn_output.txt"
+    matmult_c.gcc blk $size $size $size $block >> "./blk_output.txt"
+        
+done
+
+echo All done!
+
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   333.27 sec.
+    Max Memory :                                 506 MB
+    Average Memory :                             499.25 MB
+    Total Requested Memory :                     1024.00 MB
+    Delta Memory :                               518.00 MB
+    Max Swap :                                   -
+    Max Processes :                              4
+    Max Threads :                                5
+    Run time :                                   333 sec.
+    Turnaround time :                            336 sec.
+
+The output (if any) is above this job summary.
+
