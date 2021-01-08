@@ -1,0 +1,141 @@
+76 and 2
+76 and 5
+76 and 7
+76 and 10
+76 and 15
+76 and 20
+76 and 30
+76 and 35
+76 and 40
+76 and 50
+76 and 70
+112 and 2
+112 and 5
+112 and 7
+112 and 10
+112 and 15
+112 and 20
+112 and 30
+112 and 35
+112 and 40
+112 and 50
+112 and 70
+112 and 100
+149 and 2
+149 and 5
+149 and 7
+149 and 10
+149 and 15
+149 and 20
+149 and 30
+149 and 35
+149 and 40
+149 and 50
+149 and 70
+149 and 100
+149 and 120
+161 and 2
+161 and 5
+161 and 7
+161 and 10
+161 and 15
+161 and 20
+161 and 30
+161 and 35
+161 and 40
+161 and 50
+161 and 70
+161 and 100
+161 and 120
+161 and 150
+172 and 2
+172 and 5
+172 and 7
+172 and 10
+172 and 15
+172 and 20
+172 and 30
+172 and 35
+172 and 40
+172 and 50
+172 and 70
+172 and 100
+172 and 120
+172 and 150
+200 and 2
+200 and 5
+200 and 7
+200 and 10
+200 and 15
+200 and 20
+200 and 30
+200 and 35
+200 and 40
+200 and 50
+200 and 70
+200 and 100
+200 and 120
+200 and 150
+200 and 180
+All done!
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@n-62-21-93>
+Subject: Job 8704448: <find_blocksize> in cluster <dcc> Done
+
+Job <find_blocksize> was submitted from host <n-62-30-7> by user <s202581> in cluster <dcc> at Fri Jan  8 13:40:31 2021
+Job was executed on host(s) <n-62-21-93>, in queue <hpcintro>, as user <s202581> in cluster <dcc> at Fri Jan  8 13:40:32 2021
+</zhome/8f/4/153683> was used as the home directory.
+</zhome/8f/4/153683/HPC/big_boi_project/jorge/Assignment/find blocksize> was used as the working directory.
+Started at Fri Jan  8 13:40:32 2021
+Terminated at Fri Jan  8 13:44:32 2021
+Results reported at Fri Jan  8 13:44:32 2021
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#!/bin/bash
+
+#BSUB -J find_blocksize
+#BSUB -W 10
+#BSUB -q hpcintro
+
+rm -f *.txt
+
+msizes="76 112 149 161 172 200"
+bsizes="2 5 7 10 15 20 30 35 40 50 70 100 120 150 180"
+
+i=0
+for size in $msizes
+do
+    for block in $bsizes
+    do        
+        if (($block < $size)); then
+            echo $size and $block
+            matmult_c.gcc blk $size $size $size $block >> "./($size)_output.txt"
+        fi
+    done
+done
+
+echo All done!
+
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   239.18 sec.
+    Max Memory :                                 204 MB
+    Average Memory :                             129.75 MB
+    Total Requested Memory :                     1024.00 MB
+    Delta Memory :                               820.00 MB
+    Max Swap :                                   -
+    Max Processes :                              4
+    Max Threads :                                5
+    Run time :                                   240 sec.
+    Turnaround time :                            241 sec.
+
+The output (if any) is above this job summary.
+

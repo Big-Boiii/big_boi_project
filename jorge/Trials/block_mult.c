@@ -105,7 +105,6 @@ void getBlock(int row, int col, int bs, int m, int n, double **A, double **Z){
 
 void matmult_blk_inside(int row, int col, int bs, double **ZA, double **ZB, double **C){
     // Calculates the multiplication of the block matrices ZA*ZB and stores it in the corresponding block for matrix C.
-
 	int i1, i2, i3;
     for(i1 = 0; i1 < bs; i1++){
     	for(i3 = 0; i3 < bs; i3++){
@@ -145,7 +144,7 @@ void matmult_blk(int m, int n, int k, int bs, double **A, double **B, double **C
 }
 
 int main(){
-	int m = 4, n = 4, k = 6, bs = 3;
+	int m = 31, n = 31, k = 31, bs = 30;
 	double **A, **B, **C;
 	time_t t0, t1;
 

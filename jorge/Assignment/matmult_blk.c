@@ -59,10 +59,13 @@ void matmult_blk_inside(int row, int col, int bs, double **ZA, double **ZB, doub
     }
 }
 
-void matmult_blk(int m, int n, int k, double **A, double **B, double **C, int bs){
+void matmult_blk(int m, int n, int k, double **A, double **B, double **D, int bs){
     int i1, i2, i3;
-    double **ZA, **ZB;
+    double **ZA, **ZB, **C;
 
+    // Create C to work with it in this function
+    C = malloc_2d(m + (bs - m % bs), n + (bs - n % bs));
+    
     // Initialize C to be a 0 matrix.
     for(i1 = 0; i1 < m; i1++){
 		for(i2 = 0; i2 < n; i2++){
@@ -84,5 +87,12 @@ void matmult_blk(int m, int n, int k, double **A, double **B, double **C, int bs
                 matmult_blk_inside(i1, i2, bs, ZA, ZB, C);
 	    	}
         }
+    }
+
+    // Copy the results over to D, the matrix we are passing as argument.
+    for(i1 = 0; i1 < m; i1++){
+		for(i2 = 0; i2 < n; i2++){
+	    	D[i1][i2] = C[i1][i2];
+	 	}
     }
 }

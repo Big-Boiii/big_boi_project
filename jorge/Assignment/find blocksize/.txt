@@ -1,0 +1,5 @@
+    58.594    303.648 0 # matmult_blk 2
+    58.594   1062.368 0 # matmult_blk 5
+    58.594   1789.462 0 # matmult_blk 10
+   135.375    318.376 0 # matmult_blk 2
+   294.000    327.553 0 # matmult_blk 2

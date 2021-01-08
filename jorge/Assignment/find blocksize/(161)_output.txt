@@ -1,0 +1,14 @@
+   607.523    245.802 0 # matmult_blk 2
+   607.523    818.685 0 # matmult_blk 5
+   607.523   1203.411 0 # matmult_blk 7
+   607.523   1230.012 0 # matmult_blk 10
+   607.523   1830.338 0 # matmult_blk 15
+   607.523   1694.320 0 # matmult_blk 20
+   607.523   1949.165 0 # matmult_blk 30
+   607.523   2143.415 0 # matmult_blk 35
+   607.523   1520.540 0 # matmult_blk 40
+   607.523   1572.084 0 # matmult_blk 50
+   607.523   1310.359 0 # matmult_blk 70
+   607.523   1414.755 0 # matmult_blk 100
+   607.523    848.958 0 # matmult_blk 120
+   607.523    449.669 0 # matmult_blk 150
