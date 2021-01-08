@@ -21,11 +21,11 @@ EXECUTABLE=matmult_c.gcc
 
 # define the mkn values in the MKN variable
 #
-SIZES="10 20 30 40 50 75 100 150 200 250 500 750 1000"
+SIZES="10 20 30 40 50 75 100 150 200 250 500 750 1000 1500 2000"
 
 # define the permutation type in PERM
 #
-PERM="knm"
+PERM="kmn"
 
 # uncomment and set a reasonable BLKSIZE for the blk version
 #
