@@ -3,6 +3,45 @@
 #include <cblas.h>
 #include <time.h>
 
+double ** malloc_2d(int m, int n){
+	// initializes a matrix of size mxn. It is needed in order to make the matrix passable as an argument to other functions. DINAMICALLY ALLOCATED.
+	int i, j;
+	double **A;
+
+	A = malloc(m * sizeof(double *));
+	A[0] = malloc(m * n * sizeof(double));
+	for(i = 1; i < m; i++){
+		A[i] = A[0] + i*n;
+	}
+	
+	return A;
+}
+
+void initMatrix(double **arr, int m, int n){
+	int i, j;
+
+	/* setting the seed */
+    srand((unsigned)time(NULL));
+
+    for(i = 0; i < m; i++){
+        for(j = 0; j < n; j++){
+			// arr[i][j] = i*j;
+            arr[i][j] = rand() % 20;
+		}
+	}
+}
+
+void printMatrix(double **arr, int m, int n){
+	int i, j;
+	
+	for(i = 0; i < m; i++){
+		for(j = 0; j < n; j++){
+			printf("%.0f \t\t", arr[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+}
 
 void matmult_nat(int m, int n, int k, double **A, double **B, double **C) {
     
@@ -20,47 +59,6 @@ void matmult_nat(int m, int n, int k, double **A, double **B, double **C) {
 	    	}
         }
     }
-}
-
-void printMatrix(double **arr, int m, int n){
-	int i, j;
-	
-	for(i = 0; i < m; i++){
-		for(j = 0; j < n; j++){
-			printf("%.0f \t\t", arr[i][j]);
-		}
-		printf("\n");
-	}
-	printf("\n");
-}
-
-double ** malloc_2d(int m, int n){
-	// initializes a matrix of size mxn. It is needed in order to make the matrix passable as an argument to other functions. DINAMICALLY ALLOCATED.
-	int i, j;
-	double **A;
-
-	A = malloc(m * sizeof(double *));
-	A[0] = malloc(m * n * sizeof(double));
-	for(i = 1; i < m; i++){
-		A[i] = A[0] + i*n;
-	}
-	
-	return A;
-}
-
-
-void initMatrix(double **arr, int m, int n){
-	int i, j;
-
-	/* setting the seed */
-    srand((unsigned)time(NULL));
-
-    for(i = 0; i < m; i++){
-        for(j = 0; j < n; j++){
-			// arr[i][j] = i*j;
-            arr[i][j] = rand() % 20;
-		}
-	}
 }
 
 void pointBlock(int row, int col, int bs, double **A, double **Z){
@@ -145,13 +143,6 @@ void matmult_blk(int m, int n, int k, int bs, double **A, double **B, double **C
 	    	}
         }
     }
-	
-	// If k is not even, we need to iterate 
-	if (k % bs != 0) {
-
-
-	}
-
 }
 
 int main(){
