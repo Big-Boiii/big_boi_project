@@ -62,7 +62,7 @@ void matmult_nat(int m, int n, int k, double **A, double **B, double **C) {
 }
 
 void pointBlock(int row, int col, int bs, double **A, double **Z){
-    // This functions takes Z, which is a matrix bs*bs and makes the pointers stored at Z[0], Z[1] to point at the locations &A[row][col].
+    // This functions takes Z, which is a matrix bs*bs and makes the pointers stored at Z[0], Z[1]... to point at the locations &A[row][col], &A[row+1][col].
     // In this way we make Z point at the values of A we want for the block.
     // Z needs to be initialized with: Z = malloc(bs * sizeof(double *)); before being used.
 
@@ -103,14 +103,13 @@ void getBlock(int row, int col, int bs, int m, int n, double **A, double **Z){
 }
 
 
-void matmult_blk_inside(int row, int col, int bsm, int bsn, int bsk, double **ZA, double **ZB, double **C){
+void matmult_blk_inside(int row, int col, int bs, double **ZA, double **ZB, double **C){
     // Calculates the multiplication of the block matrices ZA*ZB and stores it in the corresponding block for matrix C.
-	// bsm, bsn and bsk will be different from bs in the border cases when (m, n, k % != 0).
 
 	int i1, i2, i3;
-    for(i1 = 0; i1< bsm; i1++){
-    	for(i2 = 0; i2 < bsn; i2++){
-	    	for(i3 = 0; i3 < bsk; i3++){
+    for(i1 = 0; i1 < bs; i1++){
+    	for(i3 = 0; i3 < bs; i3++){
+	    	for(i2 = 0; i2 < bs; i2++){
 				C[row + i1][col + i2] += ZA[i1][i3] * ZB[i3][i2];
 	    	}
         }
@@ -135,18 +134,18 @@ void matmult_blk(int m, int n, int k, int bs, double **A, double **B, double **C
     ZB = malloc_2d(bs, bs);
 
     for(i1 = 0; i1 < m; i1 += bs){
-    	for(i2 = 0; i2 < n; i2 += bs){
-	    	for(i3 = 0; i3 < k; i3 += bs){
+    	for(i3 = 0; i3 < k; i3 += bs){
+	    	for(i2 = 0; i2 < n; i2 += bs){
 				getBlock(i1, i3, bs, m, k, A, ZA);
                 getBlock(i3, i2, bs, k, n, B, ZB);
-                matmult_blk_inside(i1, i2, bs, bs, bs, ZA, ZB, C);
+                matmult_blk_inside(i1, i2, bs, ZA, ZB, C);
 	    	}
         }
     }
 }
 
 int main(){
-	int m = 1700, n = 1500, k = 468, bs = 17;
+	int m = 4, n = 4, k = 6, bs = 3;
 	double **A, **B, **C;
 	time_t t0, t1;
 
@@ -165,9 +164,9 @@ int main(){
 	t1 = time(NULL);
 	printf("%ld\n", (t1 -t0));
 
-	// printMatrix(A, m, k);
-	// printMatrix(B, k, n);
-	// printMatrix(C, m, n);
+	printMatrix(A, m, k);
+	printMatrix(B, k, n);
+	printMatrix(C, m, n);
 
 	printf("With block function: ");
 
@@ -175,9 +174,9 @@ int main(){
 	matmult_blk(m, n, k, bs, A, B, C);
 	t1 = time(NULL);
 	printf("%ld\n", (t1 -t0));
-	// printMatrix(A, m, k);
-	// printMatrix(B, k, n);
-	// printMatrix(C, m, n);
+	printMatrix(A, m, k);
+	printMatrix(B, k, n);
+	printMatrix(C, m, n);
 
 	return 0;
 }
