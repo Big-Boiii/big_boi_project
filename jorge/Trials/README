@@ -1,4 +1,4 @@
-To use this function you need to call gc from the terminal using the following command:
+To use the CBLAS function in matrix_tries you need to call gc from the terminal using the following command:
 gcc -g -O3 -std=c99 -lm -L/usr/lib64/atlas -lsatlas -o finally matrix_tries.c
 
 And then execute the file "finally"
