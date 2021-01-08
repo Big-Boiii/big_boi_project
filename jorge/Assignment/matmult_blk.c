@@ -59,7 +59,7 @@ void matmult_blk_inside(int row, int col, int bs, double **ZA, double **ZB, doub
     }
 }
 
-void matmult_blk(int m, int n, int k, int bs, double **A, double **B, double **C){
+void matmult_blk(int m, int n, int k, double **A, double **B, double **C, int bs){
     int i1, i2, i3;
     double **ZA, **ZB;
 
