@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cblas.h>
+#include <time.h>
+
 
 void matmult_nat(int m, int n, int k, double **A, double **B, double **C) {
     
@@ -72,25 +74,45 @@ void pointBlock(int row, int col, int bs, double **A, double **Z){
     }
 }
 
-void getBlock(int row, int col, int bs, double **A, double **Z){
+void getBlock(int row, int col, int bs, int m, int n, double **A, double **Z){
     // This functions copies the values from A we want for the block into a matrix Z of size bs x bs i.e. make a bs x bs block starting in position A[row][col].
     // Z needs to be initialized with: Z = malloc_2d(bs, bs); before being used.
 
-    int i, j;
+    int i, j, limi, limj;
 
-    for(i = 0; i < bs; i++){
+	for(i = 0; i < bs; i++){
         for(j = 0; j < bs; j++){
+            Z[i][j] = 0;
+        }
+    }
+
+	limi = bs;
+	limj = bs;
+
+	if(row >= m - m % bs){
+		limi = m % bs;
+	}
+
+	if(col >= n- n % bs){
+		limj = n % bs;
+	}
+
+    for(i = 0; i < limi; i++){
+        for(j = 0; j < limj; j++){
             Z[i][j] = A[row + i][col + j];
         }
     }
 }
 
 
-void matmult_blk_inside(int row, int col, int bs, double **ZA, double **ZB, double **C){
-    int i1, i2, i3;
-    for(i1 = 0; i1< bs; i1++){
-    	for(i2 = 0; i2 < bs; i2++){
-	    	for(i3 = 0; i3 < bs; i3++){
+void matmult_blk_inside(int row, int col, int bsm, int bsn, int bsk, double **ZA, double **ZB, double **C){
+    // Calculates the multiplication of the block matrices ZA*ZB and stores it in the corresponding block for matrix C.
+	// bsm, bsn and bsk will be different from bs in the border cases when (m, n, k % != 0).
+
+	int i1, i2, i3;
+    for(i1 = 0; i1< bsm; i1++){
+    	for(i2 = 0; i2 < bsn; i2++){
+	    	for(i3 = 0; i3 < bsk; i3++){
 				C[row + i1][col + i2] += ZA[i1][i3] * ZB[i3][i2];
 	    	}
         }
@@ -114,21 +136,28 @@ void matmult_blk(int m, int n, int k, int bs, double **A, double **B, double **C
 	ZA = malloc_2d(bs, bs);
     ZB = malloc_2d(bs, bs);
 
-    for(i1 = 0; i1 <= m - bs; i1 += bs){
-    	for(i2 = 0; i2 <= n - bs; i2 += bs){
-	    	for(i3 = 0; i3 <= k - bs; i3 += bs){
-				// C[i1][i2]+=A[i1][i3]*B[i3][i2];
-                getBlock(i1, i3, bs, A, ZA);
-                getBlock(i3, i2, bs, B, ZB);
-                matmult_blk_inside(i1, i2, bs, ZA, ZB, C);
+    for(i1 = 0; i1 < m; i1 += bs){
+    	for(i2 = 0; i2 < n; i2 += bs){
+	    	for(i3 = 0; i3 < k; i3 += bs){
+				getBlock(i1, i3, bs, m, k, A, ZA);
+                getBlock(i3, i2, bs, k, n, B, ZB);
+                matmult_blk_inside(i1, i2, bs, bs, bs, ZA, ZB, C);
 	    	}
         }
     }
+	
+	// If k is not even, we need to iterate 
+	if (k % bs != 0) {
+
+
+	}
+
 }
 
 int main(){
-	int m = 4, n = 4, k = 4, bs = 2;
+	int m = 1700, n = 1500, k = 468, bs = 17;
 	double **A, **B, **C;
+	time_t t0, t1;
 
 	A = malloc_2d(m, k);
 	initMatrix(A, m, k);
@@ -136,24 +165,28 @@ int main(){
 	B = malloc_2d(k,n);
 	initMatrix(B, k, n);
 	
-	C = malloc_2d(m,n);
+	C = malloc_2d(m + (bs - m % bs), n + (bs - n % bs));
 
-	printf("With our function:\n");
+	printf("With our function: ");
 
+	t0 = time(NULL);
 	matmult_nat(m, n, k, A, B, C);
+	t1 = time(NULL);
+	printf("%ld\n", (t1 -t0));
 
-	printMatrix(A, m, k);
-	printMatrix(B, k, n);
-	printMatrix(C, m, n);
+	// printMatrix(A, m, k);
+	// printMatrix(B, k, n);
+	// printMatrix(C, m, n);
 
-	printf("With block function:\n");
+	printf("With block function: ");
 
+	t0 = time(NULL);
 	matmult_blk(m, n, k, bs, A, B, C);
-
-	printMatrix(A, m, k);
-	printMatrix(B, k, n);
-	printMatrix(C, m, n);
+	t1 = time(NULL);
+	printf("%ld\n", (t1 -t0));
+	// printMatrix(A, m, k);
+	// printMatrix(B, k, n);
+	// printMatrix(C, m, n);
 
 	return 0;
 }
-
