@@ -1,0 +1,12 @@
+Functions sorted by metric: Exclusive Total CPU Time
+
+Excl.     Incl.     Excl. L1     Excl. L1   Excl. L2   Excl. L2    Name
+Total     Total     D-cache      D-cache    Cache      Cache
+CPU sec.  CPU sec.  Hits         Misses     Hits       Misses
+8.286     8.286     17467500179  653004208  240075075  412412413   <Total>
+8.276     8.286     17467500179  653004208  240075075  412412413   matmult_mnk
+0.010     0.010               0          0          0          0   __GI_memset
+0.        8.286               0          0          0          0   __libc_start_main
+0.        8.286               0          0          0          0   main
+0.        8.286               0          0          0          0   mflops
+
