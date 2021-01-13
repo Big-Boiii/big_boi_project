@@ -4,7 +4,7 @@ TARGET	= libmatmult.so
 CC	= gcc -std=c99 -fPIE
 INCS	= 
 DBG	= -g 
-OPT	= -O3 
+OPT	= -O3 -ffast-math -funroll-loops
 PARA	= 
 CFLAGS	= $(DBG) $(OPT) $(PARA) $(XOPTS)
 
