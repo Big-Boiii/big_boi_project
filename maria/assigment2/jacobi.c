@@ -5,9 +5,10 @@
 #include <math.h>
 
 
-initial(double start_T,int N,, double ***u, double ***f){
-	/*step is equal to step=(1-(-1))/(N-1)*/
+initial(double start_T,int N, double ***u, double ***f){
+	int i,j,k;
 	
+	/*step is equal to step=(1-(-1))/(N-1)*/
 	double step= 2./(N);
 	
 	/*the limits are (given_limit-(-1))/(step)*/	
@@ -97,7 +98,7 @@ jacobi(double start_T,int N,double tolerance,int iter_max, double ***u, double *
 	double step= 2./(N);
 	
 	initial(start_T,N, u, f);
-	/
+	
 	
 	while (/*(norm>tolerance)&&*/(k1<iter_max)){
 		
@@ -115,8 +116,8 @@ jacobi(double start_T,int N,double tolerance,int iter_max, double ***u, double *
 		   for(j=1;j<N-1;j++){
 			for(k=1;k<N-1;k++){
 				temp=uOld[i-1][j][k]+uOld[i+1][j][k]+uOld[i][j-1][k]+uOld[i][j+1][k]+uOld[i][j][k-1]+uOld[i][j][k+1]+step*step*f[i][j][k];
-				u[i][j][k]=temp*h
-				sum_of_sq+=u[i][j][k]*u[i][j][k]-uOld[i][j][k]*uOld[i][j][k];
+				u[i][j][k]=temp*h;
+				sum_of_sq+= u[i][j][k]*u[i][j][k]-uOld[i][j][k]*uOld[i][j][k];
 				}
 			}
 		}
@@ -125,7 +126,5 @@ jacobi(double start_T,int N,double tolerance,int iter_max, double ***u, double *
 		norm=sqrt(sum_of_sq);
 		k1=k1+1;
 	}
-
-printf("to tolerance einai %f\n",norm);
-	return k1;
+return k1;
 }

@@ -91,7 +91,7 @@ main(int argc, char *argv[]) {
 	    // no output at all
 	    break;
 	case 2:
-            printU(N,u)
+            printU(N,u);
             break;
 	case 3:
 	    output_ext = ".bin";
