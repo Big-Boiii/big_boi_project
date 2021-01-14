@@ -17,6 +17,19 @@
 #define N_DEFAULT 100
 
 
+void printU(int N,double *** u){
+    int i,j,k;
+	for(i=0;i<N;i++){
+		printf("\n %d -th layer\n",i);
+			for(j=0;j<N;j++){
+				printf("\n");
+				for(k=0;k<N;k++){
+					printf("%f  ",u[i][j][k]);
+				}
+			}
+		}
+}
+
 int
 main(int argc, char *argv[]) {
 
@@ -68,16 +81,7 @@ main(int argc, char *argv[]) {
     jacobi(start_T,N,tolerance,iter_max,u,f,uOld);
     #endif
     
-int i,j,k;
-	for(i=0;i<N;i++){
-		printf("\n %d -th layer\n",i);
-			for(j=0;j<N;j++){
-				printf("\n");
-				for(k=0;k<N;k++){
-					//printf("%f  ",uOld[i][j][k]);
-				}
-			}
-		}
+
 
 
    
@@ -87,10 +91,7 @@ int i,j,k;
 	    // no output at all
 	    break;
 	case 2:
-	    output_ext = ".txt";
-	    sprintf(output_filename, "%s_%d%s", output_prefix, N, output_ext);
-	    fprintf(stderr, "Write binary dump to %s: ", output_filename);
-	    print_uOutput(output_filename, N, u);
+            printU(N,u)
             break;
 	case 3:
 	    output_ext = ".bin";
